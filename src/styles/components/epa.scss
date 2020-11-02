@@ -1,0 +1,391 @@
+@import "../mixins/index";
+
+.container  {
+    @include flex-grow(1);
+    padding: 15px;
+    overflow-y: auto;
+}
+
+.title-container {
+    border-bottom-style: solid;
+    border-bottom-width: 2px;
+    border-color: #edeeef;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.title {
+    font-weight: 600;
+}
+
+.card {
+    display: flex;
+    border-radius: 4px;
+    background-color: white;
+    box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.6);
+    flex-direction: column;
+    &:not(:last-child){
+        margin-bottom: 10px;
+    }
+}
+
+.margin-bottom-15px {
+    margin-bottom: 15px;
+}
+
+.right-icon {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    display: inline-block;
+}
+
+.bottom_line {
+    border-bottom-style: solid;
+    border-bottom-width: 2px;
+    border-color: #edeeef;
+    padding-bottom: 25px;
+}
+
+.excel_link {
+    font-weight: 500;
+    color: #69e08a;
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.pdf_link {
+    font-weight: 500;
+    color: #ff4e51;
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.list_card_container {
+    padding: 0px 15px 0px 15px;
+}
+
+.list_card_seperator {
+    border-bottom-style: solid;
+    border-bottom-width: 2px;
+    border-color: #edeeef;
+    margin: 15px 0px 10px 0px;
+}
+
+.download_links {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+}
+
+.download_link_container {
+    display: flex;
+    flex: 1;
+    justify-content: flex-end;
+    align-items: flex-end;
+    flex-direction: column;
+    text-align: center;
+}
+
+.load_more_container {
+    display: flex;
+    padding: 10px 0 10px 0;
+    justify-content: center;
+    align-items: center;
+}
+
+.load_more_txt, .reset_filter_txt{
+    cursor: pointer;
+    font-weight: 600;
+    color: #303030;
+    text-decoration: underline;
+}
+
+.password_txt_container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.password_container {
+    display: flex;
+    flex: 1 1;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: left;
+}
+
+.file_name_txt {
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.file_name_container {
+    display: flex;
+    flex: 7.5;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-direction: column;
+    text-align: left;
+    overflow: hidden;
+}
+
+.file_status_container {
+    display: flex;
+    flex: 2.5;
+    justify-content: flex-start;
+    align-items: flex-end;
+    flex-direction: column;
+    text-align: right;
+}
+
+.table_title_container {
+    display: flex;
+    padding: 10px;
+    background-color:#2f2f2f;
+    // justify-content: center;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.table_title {
+    color: white;
+    font-weight: 500;
+}
+
+.table_container {
+    display: flex;
+    border-radius: 4px;
+    background-color: #edeeef;
+    box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.6);
+    flex-direction: column;
+    margin-top: 15px;
+}
+
+.table_header_col {
+    // text-align: center;
+    background-color: #ececec;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 15px;
+} 
+
+.table_row {
+    border-bottom-style: solid;
+    border-bottom-width: 2px;
+    border-color: #edeeef;
+    background-color: white;
+}
+
+.table_row_col {
+    font-size: 13px;
+    font-weight: 500;
+    padding: 12px;
+    // text-align: center;
+}
+
+.padding-5px {
+    display: flex;
+    flex: 1;
+    padding: 0px 5px 0px 5px;
+}
+
+.file_name_txt_table {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
+}
+
+.text_align_right {
+    text-align: right;
+}
+
+.text_align_center {
+    text-align: center;
+}
+
+.justify_center {
+    justify-content: center;
+}
+
+.width_20 {
+    width: 210px;
+}
+
+.width_30 {
+    width: 300px;
+}
+
+.width_100 {
+    width: 100%;
+}
+
+.refresh_icon_web {
+    color: white;
+    cursor: pointer;
+}
+
+.form_input_container .form-control {
+    margin: 0 5px 0 5px;
+    padding-bottom: 15px;
+}
+
+.textfield_container_web {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    flex: 1
+}
+
+.button_container {
+    margin-left: 10px;
+    width: 150px;
+    padding-bottom: 15px;
+}
+
+.action_container {
+	display: flex;
+	flex: 1;
+	flex-direction: row;
+	justify-content: flex-end;
+	align-items: center;
+	padding: 10px;
+}
+
+.margin_horizontal_5 {
+    margin: 0 5px 0 5px;
+}
+
+.cursor_pointer {
+    cursor: pointer;
+}
+
+.font_size_14 {
+    font-size: 14px;
+}
+
+.filter_container {
+    // width: 96%;
+    max-width: 500px;
+    padding: 10px;
+    background-color: white;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #cfcfcf;
+    margin: 10px;
+    border-radius: 3px;
+}
+
+.filter_opt_container {
+    display: flex;
+    align-items: center;
+}
+
+.search_input_container .form_control {
+    padding-bottom: 15px;
+}
+
+.refresh_icon {
+    transform: translateY(-50%);
+    display: inline-block;
+    position: absolute;
+    right: 35px;
+    top: 50%;
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+}
+
+.filter_icon {
+    transform: translateY(-50%);
+    display: inline-block;
+    position: absolute;
+    right: 70px;
+    top: 50%;
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+}
+
+.flex_row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.uf_web_input .form-input{
+
+    .form-input {
+        height: 40px;
+    }
+
+    height: 40px;
+
+}
+
+.txn_submit_padding {
+    margin: 20px 5px 0px 5px;
+}
+
+.sub_container1 {
+    display: flex;
+    flex-direction: row;
+}
+
+.vertical_padding {
+    padding: 10px 0px 0px 0px;
+}
+
+.txt_label {
+    color: gray;
+    font-size: small;
+}
+
+.txt_value {
+    font-size: small;
+    margin-top: 5px;
+}
+
+.folio_container {
+    display: flex;
+    flex: 1;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-direction: column;
+    text-align: left;
+}
+
+.status_container {
+    display: flex;
+    flex: 1;
+    justify-content: flex-start;
+    align-items: flex-end;
+    flex-direction: column;
+    text-align: right;
+}
+
+
+.password_txt_container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.password_container {
+    display: flex;
+    flex: 1 1;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: left;
+}
+
+.textfield_container {
+    margin-top: 15px;
+}
