@@ -1,0 +1,34 @@
+.button {
+  padding: 12px;
+  border: 1px solid;
+  color: #333;
+  border-radius: 8px;
+  outline: none;
+  background-color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  &.prefix-btn {
+    position: relative;
+    padding-left: 40px;
+  }
+  &.sufix-btn{
+    position: relative;
+    padding-right: 40px;
+  }
+  &[disabled] {
+    pointer-events: none;
+    opacity: 0.5;
+  }
+}
+
+.button-invert {
+  @include vendor-prefix(transition, ".3s linear opacity");
+  background-color: #000;
+  opacity: 0.8;
+  border-color: #fff;
+  color: #fff;
+  &:hover {
+    opacity: 1;
+  }
+}

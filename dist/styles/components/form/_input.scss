@@ -1,0 +1,52 @@
+.form-input__wrapper {
+  @include flexbox;
+  @include flex-direction(column);
+  position: relative;
+}
+.form-input__label {
+  color: rgba(0,0,0,.4);
+  font-size: 14px;
+  font-weight: 400;
+  padding-bottom: 2px;
+  display: block;
+  line-height: 19px;
+  pointer-events: none;
+}
+
+.form-input {
+  font-size: 14px;
+  padding: 6px 0;
+  display: inline-block;
+  border: none;
+  border-bottom: 1px solid #979797;
+  outline: none;
+  width: 100%;
+  background-color: inherit;
+  &:hover,
+  &:focus {
+    border-color: #979797;
+  }
+}
+
+.input-prefix {
+  padding-left: 40px;
+}
+
+.input-suffix {
+  padding-right: 40px;
+}
+.input-password__icon {
+  @include vendor-prefix(transform, translateY(-50%));
+  display: inline-block;
+  position: absolute;
+  width: 24px;
+  height: 20px;
+  z-index: 1;
+  top: 50%;
+  right: 12px;
+  cursor: pointer;
+}
+
+.input_container {
+  position: relative;
+}

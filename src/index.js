@@ -1,14 +1,9 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
 import './styles/index.scss';
-import App from './App';
+import EPA from './container/EPA';
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+module.exports = {
+  EPA: EPA
+}
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
