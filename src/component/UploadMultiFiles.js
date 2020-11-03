@@ -26,7 +26,9 @@ const UploadMultiFiles = (props) => {
         uploadClientFiles,
         postAudit,
         ipAddress,
-        employee_id
+        employee_id,
+        isPartner,
+        buid
     } = props;
     const [selectedFiles, setSelectedFiles] = useState([Object.assign({}, defaultFileObj)]);
     const [errorObj, setErrorObj] = useState({});
@@ -86,6 +88,10 @@ const UploadMultiFiles = (props) => {
         formData.append('passwords', JSON.stringify(passwords));
         formData.append('pan_numbers', JSON.stringify(pans));
         formData.append('rm_id', '' + employee_id);
+        if(isPartner) {
+            formData.append('partner_id', '' + employee_id);
+        }
+        formData.append('rm_id', '' + buid);
 
         isUploading(true);
 

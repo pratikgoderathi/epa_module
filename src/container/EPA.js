@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 //Styles
-import "../styles/components/epa.scss";
+// import "../styles/components/epa.scss";
 
 //Component 
 import UploadMultiFiles from "../component/UploadMultiFiles";
@@ -231,7 +231,9 @@ const UploadFiles = (props) => {
         getDownloadUrl,
         uploadClientFiles,
         postAudit,
-        ipAddress
+        ipAddress,
+        isPartner,
+        buid
     } = props;
     const [isLoading, setLoading] = useState(false);
     const [uploadedFiles, setUploadedFiles] = useState([]);
@@ -273,7 +275,9 @@ const UploadFiles = (props) => {
             setLoading(true);
             let params = {
                 rm_id,
-                offset
+                offset,
+                buid,
+                isPartner
             }
             // reset offset to zero if refresh 
             if (refresh) {
@@ -365,7 +369,7 @@ const UploadFiles = (props) => {
         }
     }
 
-    return (<div className='container'>
+    return (<div>
         <Snackbar
             open={Boolean(error_message)}
             autoHideDuration={3000}
@@ -409,6 +413,8 @@ const UploadFiles = (props) => {
                 uploadClientFiles={uploadClientFiles}
                 postAudit={postAudit}
                 employee_id={employee_id}
+                isPartner={isPartner}
+                buid={buid}
                 ipAddress={ipAddress}
                 isUploading={(bool) => setLoading(bool)}
                 setSuccessMsg={(msg) => setSuccessMsg(msg)}
@@ -503,11 +509,13 @@ const UploadFiles = (props) => {
 
 UploadFiles.propTypes = {
     employee_id: PropTypes.number.isRequired,
+    isPartner: PropTypes.bool.isRequired,
     getUploadedClientFiles: PropTypes.func,
     getDownloadUrl: PropTypes.func,
     uploadClientFiles: PropTypes.func,
     postAudit: PropTypes.func,
-    ipAddress: PropTypes.string
+    ipAddress: PropTypes.string,
+    buid: PropTypes.string
 }
 
 UploadFiles.defaultProps = {
@@ -515,7 +523,9 @@ UploadFiles.defaultProps = {
     getDownloadUrl: () => {},
     uploadClientFiles: () => { },
     postAudit: () => { },
-    ipAddress: ''
+    ipAddress: '',
+    isPartner: false,
+    buid: ""
 }
 
 export default UploadFiles;
