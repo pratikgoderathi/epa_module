@@ -1,6 +1,6 @@
 {
   "name": "epa_module",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "private": false,
   "babel": {
     "presets": [
@@ -8,8 +8,7 @@
     ]
   },
   "main": "./lib/EPA.js",
-  "dependencies": {
-  },
+  "dependencies": {},
   "scripts": {
     "build": "webpack"
   },
