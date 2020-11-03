@@ -159,7 +159,7 @@ const UploadMultiFiles = (props) => {
         <div className='card'>
           <div style={{ padding: 20 }}>
             <div className='title-container'>
-                <h1 className='title'>UPLOAD FILES TEST PACKAGE</h1>
+                <h1 className='title'>UPLOAD FILES</h1>
                 <span style={{ fontSize: 13, opacity: 0.7 }}>
                     Only upload original statements without any modifications done to them
                 </span>
