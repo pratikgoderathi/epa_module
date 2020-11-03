@@ -25,6 +25,8 @@ import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
 import SearchIcon from '@material-ui/icons/Search';
+import PropTypes from 'prop-types';
+
 const moment = require('moment');
 
 const filterStatusNames = [
@@ -497,6 +499,23 @@ const UploadFiles = (props) => {
                 setSearchText={handleSearchTxtChanged}
             />}
     </div>)
+}
+
+UploadFiles.propTypes = {
+    employee_id: PropTypes.number.isRequired,
+    getUploadedClientFiles: PropTypes.func,
+    getDownloadUrl: PropTypes.func,
+    uploadClientFiles: PropTypes.func,
+    postAudit: PropTypes.func,
+    ipAddress: PropTypes.string
+}
+
+UploadFiles.defaultProps = {
+    getUploadedClientFiles: () => {},
+    getDownloadUrl: () => {},
+    uploadClientFiles: () => { },
+    postAudit: () => { },
+    ipAddress: ''
 }
 
 export default UploadFiles;
