@@ -93,7 +93,7 @@ const UploadedFilesCard = (props) => {
                             
                             {Boolean(excelFile) && Boolean(pdfFile) ? (<>
                             &nbsp;
-                            <h4 style={{ fontSize: 12 }}>OR</h4>
+                            <h4 style={{ fontSize: 12, color: "black" }}>OR</h4>
                             &nbsp;
                             </>) : <div/>}
 

@@ -329,7 +329,7 @@
 
 	.excel_link {
 		font-weight: 500;
-		color: #69e08a;
+		color: #69e08a !important;
 		text-decoration: underline;
 		cursor: pointer;
 		font-size: 12px;
@@ -337,7 +337,7 @@
 
 	.pdf_link {
 		font-weight: 500;
-		color: #ff4e51;
+		color: #ff4e51 !important;
 		text-decoration: underline;
 		cursor: pointer;
 		font-size: 12px;
@@ -632,6 +632,7 @@
 	.txt_value {
 		font-size: small;
 		margin-top: 5px;
+		color: black;
 	}
 
 	.folio_container {
