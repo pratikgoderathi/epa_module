@@ -87,11 +87,12 @@ const UploadMultiFiles = (props) => {
 
         formData.append('passwords', JSON.stringify(passwords));
         formData.append('pan_numbers', JSON.stringify(pans));
-        formData.append('rm_id', '' + employee_id);
         if(isPartner) {
             formData.append('partner_id', '' + employee_id);
+        }else {
+            formData.append('rm_id', '' + employee_id);
         }
-        formData.append('rm_id', '' + buid);
+        formData.append('buid', '' + buid);
 
         isUploading(true);
 
