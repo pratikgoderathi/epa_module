@@ -1,4 +1,4 @@
-import React, { useState} from "react";
+import React, { useState } from "react";
 // import "../styles/components/epa.scss";
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
@@ -6,11 +6,11 @@ import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 const moment = require('moment');
 
 const UploadedFilesCard = (props) => {
-    const { 
-        fileName = "-", 
-        status = "processing", 
-        createdAt = "-", 
-        onClickLink=()=>{},
+    const {
+        fileName = "-",
+        status = "processing",
+        createdAt = "-",
+        onClickLink = () => { },
         excelFile,
         pdfFile,
         setErrorMsg,
@@ -18,13 +18,13 @@ const UploadedFilesCard = (props) => {
     } = props;
 
     const [passwordVisible, setPasswordVisible] = useState(false);
-    
+
     const togglePasswordIcon = () => {
         setPasswordVisible(!passwordVisible);
     }
 
     const displayPassword = () => {
-        if(!Boolean(password) || passwordVisible) {
+        if (!Boolean(password) || passwordVisible) {
             return password;
         }
 
@@ -32,7 +32,7 @@ const UploadedFilesCard = (props) => {
     }
 
     const handlClickExcelFile = () => {
-        if(excelFile) {
+        if (excelFile) {
             onClickLink({
                 "file_key": excelFile
             })
@@ -71,7 +71,7 @@ const UploadedFilesCard = (props) => {
             <div className='sub_container1'>
                 <div className='folio_container vertical_padding'>
                     <h3 className='txt_label'>Date & Time</h3>
-                    <h3 className='txt_value'>{moment(createdAt).fromNow()}</h3>
+                    <h3 className='txt_value'>{moment(createdAt).format('DD-MM-YYYY, hh:mm a')}</h3>
                 </div>
                 {Boolean(password) &&
                     <div className='password_container vertical_padding'>
@@ -84,25 +84,25 @@ const UploadedFilesCard = (props) => {
                     </div>
                 }
                 {Boolean(excelFile) || Boolean(pdfFile) ? (<div className='download_link_container vertical_padding'>
-                        <h3 className='txt_label'>Download</h3>
-                        <div className='download_links'>
-                            {Boolean(excelFile) ? 
-                                <h3 className='txt_value excel_link'
-                                    onClick={handlClickExcelFile}>{pdfFile ? "Output file" : "Consolidated holdings"}</h3> : <div/>
-                            }
-                            
-                            {Boolean(excelFile) && Boolean(pdfFile) ? (<>
+                    <h3 className='txt_label'>Download</h3>
+                    <div className='download_links'>
+                        {Boolean(excelFile) ?
+                            <h3 className='txt_value excel_link'
+                                onClick={handlClickExcelFile}>{pdfFile ? "Output file" : "Consolidated holdings"}</h3> : <div />
+                        }
+
+                        {Boolean(excelFile) && Boolean(pdfFile) ? (<>
                             &nbsp;
                             <h4 style={{ fontSize: 12, color: "black" }}>OR</h4>
                             &nbsp;
-                            </>) : <div/>}
+                            </>) : <div />}
 
-                            {Boolean(pdfFile) ?
-                                    <h3 className='txt_value pdf_link'
-                                        onClick={handleClickPdfFile}>Uploaded File</h3> : <div/>
-                            }
-                        </div>
-                    </div>) : <div/>
+                        {Boolean(pdfFile) ?
+                            <h3 className='txt_value pdf_link'
+                                onClick={handleClickPdfFile}>Uploaded File</h3> : <div />
+                        }
+                    </div>
+                </div>) : <div />
                 }
             </div>
             <div className='list_card_seperator' />

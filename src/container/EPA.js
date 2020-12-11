@@ -178,7 +178,7 @@ const UploadedFilesTable = (props) => {
 
                             return (
                                 <tr key={'key_' + index} className={'table_row'}>
-                                    <td className='table_row_col'>{dateTime !== "-" ? moment(dateTime).fromNow() : "-"}</td>
+                                    <td className='table_row_col'>{dateTime !== "-" ? moment(dateTime).format('DD-MM-YYYY, hh:mm a') : "-"}</td>
                                     <td className='table_row_col file_name_txt_table'>{fileName}</td>
                                     <td className='table_row_col text_align_center'>{status}</td>
                                     <td className='table_row_col text_align_center'>
@@ -225,9 +225,9 @@ const UploadedFilesTable = (props) => {
 }
 
 const UploadFiles = (props) => {
-    const { 
-        employee_id, 
-        getUploadedClientFiles, 
+    const {
+        employee_id,
+        getUploadedClientFiles,
         getDownloadUrl,
         uploadClientFiles,
         postAudit,
@@ -519,8 +519,8 @@ UploadFiles.propTypes = {
 }
 
 UploadFiles.defaultProps = {
-    getUploadedClientFiles: () => {},
-    getDownloadUrl: () => {},
+    getUploadedClientFiles: () => { },
+    getDownloadUrl: () => { },
     uploadClientFiles: () => { },
     postAudit: () => { },
     ipAddress: '',
