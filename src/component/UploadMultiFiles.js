@@ -8,7 +8,7 @@ import NoEncryptionOutlinedIcon from '@material-ui/icons/NoEncryptionOutlined';
 import Ripple from "react-ripples";
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { rippleWhite } from "../variables";
-import {panRegex} from '../validation/regex';
+import { panRegex } from '../validation/regex';
 
 const defaultFileObj = {
     file: undefined,
@@ -20,8 +20,8 @@ const defaultFileObj = {
 }
 const UploadMultiFiles = (props) => {
     const {
-        isUploading, 
-        setSuccessMsg, 
+        isUploading,
+        setSuccessMsg,
         setErrorMsg,
         uploadClientFiles,
         postAudit,
@@ -55,7 +55,7 @@ const UploadMultiFiles = (props) => {
         updatedFiles.splice(index, 1);
         setSelectedFiles(updatedFiles);
     }
-    
+
     const uploadFilesToS3 = () => {
         //prepare data
         const passwords = [];
@@ -68,12 +68,12 @@ const UploadMultiFiles = (props) => {
             pans.push(selectedFile.pan);
             formData.append('files', selectedFile.file);
             //add error if pan validation failed
-            if(!panRegex.test(selectedFile.pan)) {
-                errorObjCp[selectedFile.id] = {pan: "Invalid PAN"};
+            if (!panRegex.test(selectedFile.pan)) {
+                errorObjCp[selectedFile.id] = { pan: "Invalid PAN" };
             }
 
             if (!Boolean(selectedFile.pan)) {
-                errorObjCp[selectedFile.id] = {pan: "Please provide PAN"};
+                errorObjCp[selectedFile.id] = { pan: "Please provide PAN" };
             }
         })
 
@@ -87,9 +87,9 @@ const UploadMultiFiles = (props) => {
 
         formData.append('passwords', JSON.stringify(passwords));
         formData.append('pan_numbers', JSON.stringify(pans));
-        if(isPartner) {
+        if (isPartner) {
             formData.append('partner_id', '' + employee_id);
-        }else {
+        } else {
             formData.append('rm_id', '' + employee_id);
         }
         formData.append('buid', '' + buid);
@@ -102,7 +102,7 @@ const UploadMultiFiles = (props) => {
         uploadClientFiles(formData)
             .then(res => {
                 isUploading(false);
-                if(res.status === 200) {
+                if (res.status === 200) {
                     let newFile = Object.assign({}, defaultFileObj);
                     newFile.id = Date.now();
                     setSelectedFiles([newFile]);
@@ -149,7 +149,7 @@ const UploadMultiFiles = (props) => {
         updatedFiles[index].pan = Boolean(pan) ? pan.toUpperCase() : "";
         let errorObjCp = Object.assign({}, errorObj);
         //remove pan field error while typing 
-        if(Boolean(errorObjCp[updatedFiles[index].id])) {
+        if (Boolean(errorObjCp[updatedFiles[index].id])) {
             errorObjCp[updatedFiles[index].id].pan = "";
             setErrorObj(errorObjCp);
         }
@@ -164,18 +164,93 @@ const UploadMultiFiles = (props) => {
 
     return (
         <div className='card'>
-          <div style={{ padding: 20 }}>
-            <div className='title-container'>
-                <h1 className='title'>UPLOAD FILES</h1>
-                <span style={{ fontSize: 13, opacity: 0.7 }}>
-                    Only upload original statements without any modifications done to them
+            <div style={{ padding: 20 }}>
+                <div className='title-container'>
+                    <h1 className='title'>UPLOAD FILES</h1>
+                    <span style={{ fontSize: 13, opacity: 0.7 }}>
+                        Only upload original statements without any modifications done to them
                 </span>
-            </div>
-            {selectedFiles.map((file, index) => {
-                if(isWebDevice) {
+                </div>
+                {selectedFiles.map((file, index) => {
+                    if (isWebDevice) {
+                        return (
+                            <div className='textfield_container_web' key={"" + file.id}>
+                                <Form.FormItem className='form_input_container width_20'>
+                                    <Input
+                                        label={"Upload file"}
+                                        accept={'application/pdf'}
+                                        type={"file"}
+                                        autoComplete='off'
+                                        id={"" + file.id}
+                                        onChange={(e) => {
+                                            const { files } = e.target;
+                                            updateSelectedFile(index, files[0]);
+                                        }}
+                                    />
+                                </Form.FormItem>
+                                <Form.FormItem className='form_input_container width_20 uf_web_input'>
+                                    <Input
+                                        label={"Password wherever applicable"}
+                                        type={file.passwordVisible ? "text" : "password"}
+                                        onChange={(e) => {
+                                            updateFilePassword(index, e.target.value);
+                                        }}
+                                        value={Boolean(file.password) ? file.password : ''}
+                                    />
+                                    <div className='right-icon'>
+                                        {file.passwordVisible ? <NoEncryptionOutlinedIcon onClick={() => setPasswordVisible(index)} />
+                                            : <LockOutlinedIcon onClick={() => setPasswordVisible(index)} />}
+                                    </div>
+                                </Form.FormItem>
+                                <Form.FormItem className='form_input_container width_20 uf_web_input'
+                                    validateStatus={(() => {
+                                        let error = Boolean(errorObj[file.id]) && Boolean(errorObj[file.id].pan) ? "error" : "";
+                                        let inputErr = (file.pan !== "" && !(panRegex.test(file.pan))) ? "error" : "";
+                                        let finalErr = error || inputErr || "";
+                                        console.log("PAN", error, "INPUT", inputErr);
+                                        return finalErr;
+                                    })()}
+                                    helperText={(() => {
+                                        let error = Boolean(errorObj[file.id]) ? errorObj[file.id].pan : "";
+                                        let inputErr = (file.pan !== "" && !(panRegex.test(file.pan))) ? "Invalid PAN" : "";
+                                        let finalErr = error || inputErr || "";
+                                        return finalErr;
+                                    })()}
+                                >
+                                    <Input
+                                        label={"PAN"}
+                                        id={"PAN_" + file.id}
+                                        type={"text"}
+                                        onChange={(e) => {
+                                            updatePanDetails(index, e.target.value)
+                                        }}
+                                        value={Boolean(file.pan) ? file.pan : ''}
+                                    />
+                                </Form.FormItem>
+                                <Ripple className={`button_container ${rippleclass}`} color={rippleWhite}>
+                                    <Button
+                                        className='ops__btn txn_submit_padding'
+                                        onClick={() => removeSelectedFile(index)}
+                                        disabled={selectedFiles.length === 1}>
+                                        REMOVE
+                                </Button>
+                                </Ripple>
+                                <Ripple className={`button_container ${rippleclass}`} color={rippleWhite}>
+                                    <Button
+                                        className='ops__btn txn_submit_padding'
+                                        invertButton
+                                        onClick={addNewFile}
+                                        disabled={index !== (selectedFiles.length - 1)}>
+                                        ADD
+                                </Button>
+                                </Ripple>
+                            </div>
+                        )
+                    }
+
                     return (
-                        <div className='textfield_container_web' key={"" + file.id}>
-                            <Form.FormItem className='form_input_container width_20'>
+                        <div className='textfield_container bottom_line' key={"" + file.id}>
+                            <Form.FormItem>
                                 <Input
                                     label={"Upload file"}
                                     accept={'application/pdf'}
@@ -188,9 +263,9 @@ const UploadMultiFiles = (props) => {
                                     }}
                                 />
                             </Form.FormItem>
-                            <Form.FormItem className='form_input_container width_20 uf_web_input'>
+                            <Form.FormItem>
                                 <Input
-                                    label={"Password"}
+                                    label={"Password wherever applicable"}
                                     type={file.passwordVisible ? "text" : "password"}
                                     onChange={(e) => {
                                         updateFilePassword(index, e.target.value);
@@ -202,21 +277,21 @@ const UploadMultiFiles = (props) => {
                                         : <LockOutlinedIcon onClick={() => setPasswordVisible(index)} />}
                                 </div>
                             </Form.FormItem>
-                            <Form.FormItem className='form_input_container width_20 uf_web_input'
+                            <Form.FormItem
                                 validateStatus={(() => {
-                                    let error = Boolean(errorObj[file.id]) && Boolean(errorObj[file.id].pan)? "error" : "";
+                                    let error = Boolean(errorObj[file.id]) && Boolean(errorObj[file.id].pan) ? "error" : "";
                                     let inputErr = (file.pan !== "" && !(panRegex.test(file.pan))) ? "error" : "";
                                     let finalErr = error || inputErr || "";
-                                    console.log("PAN", error, "INPUT",inputErr);
+                                    console.log("PAN", error, "INPUT", inputErr);
                                     return finalErr;
                                 })()}
-                                helperText={(()=> {
+                                helperText={(() => {
                                     let error = Boolean(errorObj[file.id]) ? errorObj[file.id].pan : "";
                                     let inputErr = (file.pan !== "" && !(panRegex.test(file.pan))) ? "Invalid PAN" : "";
                                     let finalErr = error || inputErr || "";
                                     return finalErr;
                                 })()}
-                                >
+                            >
                                 <Input
                                     label={"PAN"}
                                     id={"PAN_" + file.id}
@@ -227,114 +302,39 @@ const UploadMultiFiles = (props) => {
                                     value={Boolean(file.pan) ? file.pan : ''}
                                 />
                             </Form.FormItem>
-                            <Ripple className={`button_container ${rippleclass}`} color={rippleWhite}>
-                                <Button
-                                    className='ops__btn txn_submit_padding'
-                                    onClick={() => removeSelectedFile(index)}
-                                    disabled={selectedFiles.length === 1}>
-                                    REMOVE
+                            <div style={{ display: "flex", flexDirection: "row" }}>
+                                <Ripple className={rippleclass} color={rippleWhite}>
+                                    <Button
+                                        className='ops__btn txn_submit_padding'
+                                        onClick={() => removeSelectedFile(index)}
+                                        disabled={selectedFiles.length === 1}>
+                                        REMOVE
                                 </Button>
-                            </Ripple>
-                            <Ripple className={`button_container ${rippleclass}`} color={rippleWhite}>
-                                <Button
-                                    className='ops__btn txn_submit_padding'
-                                    invertButton
-                                    onClick={addNewFile}
-                                    disabled={index !== (selectedFiles.length - 1)}>
-                                    ADD
+                                </Ripple>
+                                <Ripple className={rippleclass} color={rippleWhite}>
+                                    <Button
+                                        className='ops__btn txn_submit_padding'
+                                        invertButton
+                                        onClick={addNewFile}
+                                        disabled={index !== (selectedFiles.length - 1)}>
+                                        ADD
                                 </Button>
-                            </Ripple>
+                                </Ripple>
+                            </div>
                         </div>
                     )
-                }
-
-                return (
-                    <div className='textfield_container bottom_line' key={""+file.id}>
-                        <Form.FormItem>
-                            <Input
-                                label={"Upload file"}
-                                accept={'application/pdf'}
-                                type={"file"}
-                                autoComplete='off'
-                                id={""+file.id}
-                                onChange={(e) => {
-                                    const { files } = e.target;
-                                    updateSelectedFile(index, files[0]);
-                                }}
-                            />
-                        </Form.FormItem>
-                        <Form.FormItem>
-                            <Input
-                                label={"Password"}
-                                type={file.passwordVisible ? "text" : "password"}
-                                onChange={(e) => {
-                                    updateFilePassword(index, e.target.value);
-                                }}
-                                value={Boolean(file.password) ? file.password : ''}
-                            />
-                            <div className='right-icon'>
-                                {file.passwordVisible ? <NoEncryptionOutlinedIcon onClick={() => setPasswordVisible(index)} /> 
-                                    : <LockOutlinedIcon onClick={() => setPasswordVisible(index)}/>}
-                            </div>
-                        </Form.FormItem>
-                        <Form.FormItem
-                            validateStatus={(() => {
-                                let error = Boolean(errorObj[file.id]) && Boolean(errorObj[file.id].pan) ? "error" : "";
-                                let inputErr = (file.pan !== "" && !(panRegex.test(file.pan))) ? "error" : "";
-                                let finalErr = error || inputErr || "";
-                                console.log("PAN", error, "INPUT", inputErr);
-                                return finalErr;
-                            })()}
-                            helperText={(() => {
-                                let error = Boolean(errorObj[file.id]) ? errorObj[file.id].pan : "";
-                                let inputErr = (file.pan !== "" && !(panRegex.test(file.pan))) ? "Invalid PAN" : "";
-                                let finalErr = error || inputErr || "";
-                                return finalErr;
-                            })()}
-                        >
-                            <Input
-                                label={"PAN"}
-                                id={"PAN_" + file.id}
-                                type={"text"}
-                                onChange={(e) => {
-                                    updatePanDetails(index, e.target.value)
-                                }}
-                                value={Boolean(file.pan) ? file.pan : ''}
-                            />
-                        </Form.FormItem>
-                        <div style={{ display: "flex", flexDirection: "row" }}>
-                            <Ripple className={rippleclass} color={rippleWhite}>
-                                <Button
-                                    className='ops__btn txn_submit_padding'
-                                    onClick={() =>  removeSelectedFile(index)}
-                                    disabled={selectedFiles.length === 1}>
-                                    REMOVE
-                                </Button>
-                            </Ripple>
-                            <Ripple className={rippleclass} color={rippleWhite}>
-                                <Button
-                                    className='ops__btn txn_submit_padding'
-                                    invertButton
-                                    onClick={addNewFile}
-                                    disabled={index !== (selectedFiles.length - 1)}>
-                                    ADD
-                                </Button>
-                            </Ripple>
-                        </div>
-                    </div>
-                )
-            })}
-            {isWebDevice ? <div className={'bottom_line'}/> : <div/>}
-            <Ripple className={`${rippleclass} ${uploadBtnWidthClass}`} color={rippleWhite}>
-                <Button
-                    className='ops__btn txn_submit_padding'
-                    invertButton
-                    onClick={uploadFilesToS3}
-                    disabled={!(selectedFiles.filter(file => Boolean(file.file) ).length > 0)}>
-                    UPLOAD
+                })}
+                {isWebDevice ? <div className={'bottom_line'} /> : <div />}
+                <Ripple className={`${rippleclass} ${uploadBtnWidthClass}`} color={rippleWhite}>
+                    <Button
+                        className='ops__btn txn_submit_padding'
+                        invertButton
+                        onClick={uploadFilesToS3}
+                        disabled={!(selectedFiles.filter(file => Boolean(file.file)).length > 0)}>
+                        UPLOAD
                 </Button>
-            </Ripple>
-          </div>
+                </Ripple>
+            </div>
         </div>
     )
 }
