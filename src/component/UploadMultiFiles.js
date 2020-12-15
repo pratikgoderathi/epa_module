@@ -56,6 +56,37 @@ const UploadMultiFiles = (props) => {
         setSelectedFiles(updatedFiles);
     }
 
+    const validateFilePassword = (fileId, file, password) => {
+        const pdfjsLib = window['pdfjs-dist/build/pdf'];
+
+        pdfjsLib.GlobalWorkerOptions.workerSrc = '//mozilla.github.io/pdf.js/build/pdf.worker.js';
+
+        const loadPdf = pdfjsLib.getDocument({ url: URL.createObjectURL(file), password: password });
+
+        let errorObjCp = Object.assign({}, errorObj);
+        loadPdf.promise.then(function () {
+            if (errorObjCp[fileId]) {
+                errorObjCp[fileId].password = "";
+            } else {
+                errorObjCp[fileId] = { password: "" };
+            }
+            console.log("Validate File Password Success", errorObjCp);
+            setErrorObj(errorObjCp);
+        }, function ({ name, message }) {
+            console.log("Validate File Password", name, message);
+            // PDF loading error
+            if (name === 'PasswordException') {
+                if (errorObjCp[fileId]) {
+                    errorObjCp[fileId].password = message;
+                } else {
+                    errorObjCp[fileId] = { password: message };
+                }
+                console.log("Validate File Password", errorObjCp);
+                setErrorObj(errorObjCp);
+            }
+        });
+    }
+
     const uploadFilesToS3 = () => {
         //prepare data
         const passwords = [];
@@ -68,18 +99,19 @@ const UploadMultiFiles = (props) => {
             pans.push(selectedFile.pan);
             formData.append('files', selectedFile.file);
             //add error if pan validation failed
+            errorObjCp[selectedFile.id] = errorObjCp[selectedFile.id] || {};
             if (!panRegex.test(selectedFile.pan)) {
-                errorObjCp[selectedFile.id] = { pan: "Invalid PAN" };
+                errorObjCp[selectedFile.id].pan = "Invalid PAN";
             }
 
             if (!Boolean(selectedFile.pan)) {
-                errorObjCp[selectedFile.id] = { pan: "Please provide PAN" };
+                errorObjCp[selectedFile.id].pan = "Please provide PAN";
             }
         })
 
         //check if there any error and return
         if (Object.keys(errorObjCp).filter((id) => {
-            return Boolean(errorObjCp[id]) && Boolean(errorObjCp[id].pan)
+            return Boolean(errorObjCp[id]) && (Boolean(errorObjCp[id].pan) || Boolean(errorObjCp[id].password));
         }).length > 0) {
             setErrorObj(errorObjCp);
             return
@@ -136,12 +168,18 @@ const UploadMultiFiles = (props) => {
         const updatedFiles = [...selectedFiles];
         updatedFiles[index].file = file;
         setSelectedFiles(updatedFiles);
+        let password = updatedFiles[index].password;
+        let fileId = updatedFiles[index].id;
+        validateFilePassword(fileId, file, password)
     }
 
     const updateFilePassword = (index, password) => {
         const updatedFiles = [...selectedFiles];
         updatedFiles[index].password = password;
         setSelectedFiles(updatedFiles);
+        let fileId = updatedFiles[index].id;
+        let file = updatedFiles[index].file;
+        validateFilePassword(fileId, file, password)
     }
 
     const updatePanDetails = (index, pan) => {
@@ -178,6 +216,7 @@ const UploadMultiFiles = (props) => {
                                 <Form.FormItem className='form_input_container width_20'>
                                     <Input
                                         label={"Upload file"}
+                                        style={{ overflow: 'hidden' }}
                                         accept={'application/pdf'}
                                         type={"file"}
                                         autoComplete='off'
@@ -188,9 +227,25 @@ const UploadMultiFiles = (props) => {
                                         }}
                                     />
                                 </Form.FormItem>
-                                <Form.FormItem className='form_input_container width_20 uf_web_input'>
+                                <Form.FormItem className='form_input_container width_20 uf_web_input'
+                                    validateStatus={(() => {
+                                        let error =
+                                            Boolean(errorObj[file.id]) &&
+                                                Boolean(errorObj[file.id].password)
+                                                ? 'error'
+                                                : '';
+                                        let finalErr = error || '';
+                                        return finalErr;
+                                    })()}
+                                    helperText={(() => {
+                                        let error = Boolean(errorObj[file.id])
+                                            ? errorObj[file.id].password
+                                            : '';
+                                        let finalErr = error || '';
+                                        return finalErr;
+                                    })()}>
                                     <Input
-                                        label={"Password wherever applicable"}
+                                        label={"Password"}
                                         type={file.passwordVisible ? "text" : "password"}
                                         onChange={(e) => {
                                             updateFilePassword(index, e.target.value);
@@ -254,6 +309,7 @@ const UploadMultiFiles = (props) => {
                                 <Input
                                     label={"Upload file"}
                                     accept={'application/pdf'}
+                                    style={{ overflow: 'hidden' }}
                                     type={"file"}
                                     autoComplete='off'
                                     id={"" + file.id}
@@ -263,9 +319,25 @@ const UploadMultiFiles = (props) => {
                                     }}
                                 />
                             </Form.FormItem>
-                            <Form.FormItem>
+                            <Form.FormItem
+                                validateStatus={(() => {
+                                    let error =
+                                        Boolean(errorObj[file.id]) &&
+                                            Boolean(errorObj[file.id].password)
+                                            ? 'error'
+                                            : '';
+                                    let finalErr = error || '';
+                                    return finalErr;
+                                })()}
+                                helperText={(() => {
+                                    let error = Boolean(errorObj[file.id])
+                                        ? errorObj[file.id].password
+                                        : '';
+                                    let finalErr = error || '';
+                                    return finalErr;
+                                })()}>
                                 <Input
-                                    label={"Password wherever applicable"}
+                                    label={"Password"}
                                     type={file.passwordVisible ? "text" : "password"}
                                     onChange={(e) => {
                                         updateFilePassword(index, e.target.value);
