@@ -56,12 +56,14 @@ const UploadMultiFiles = (props) => {
         setSelectedFiles(updatedFiles);
     }
 
-    const validateFilePassword = (fileId, file, password) => {
-        const pdfjsLib = window['pdfjs-dist/build/pdf'];
+    const validateFilePassword = async (fileId, file, password) => {
+        const pdfjs = window['pdfjs-dist/build/pdf'];
 
-        pdfjsLib.GlobalWorkerOptions.workerSrc = '//mozilla.github.io/pdf.js/build/pdf.worker.js';
+        const pdfjsWorker = window["pdfjs-dist/build/pdf.worker.js"];
 
-        const loadPdf = pdfjsLib.getDocument({ url: URL.createObjectURL(file), password: password });
+        pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
+
+        const loadPdf = pdfjs.getDocument({ url: URL.createObjectURL(file), password: password });
 
         let errorObjCp = Object.assign({}, errorObj);
         loadPdf.promise.then(function () {
@@ -70,10 +72,8 @@ const UploadMultiFiles = (props) => {
             } else {
                 errorObjCp[fileId] = { password: "" };
             }
-            console.log("Validate File Password Success", errorObjCp);
             setErrorObj(errorObjCp);
         }, function ({ name, message }) {
-            console.log("Validate File Password", name, message);
             // PDF loading error
             if (name === 'PasswordException') {
                 if (errorObjCp[fileId]) {
@@ -81,7 +81,6 @@ const UploadMultiFiles = (props) => {
                 } else {
                     errorObjCp[fileId] = { password: message };
                 }
-                console.log("Validate File Password", errorObjCp);
                 setErrorObj(errorObjCp);
             }
         });
@@ -262,7 +261,6 @@ const UploadMultiFiles = (props) => {
                                         let error = Boolean(errorObj[file.id]) && Boolean(errorObj[file.id].pan) ? "error" : "";
                                         let inputErr = (file.pan !== "" && !(panRegex.test(file.pan))) ? "error" : "";
                                         let finalErr = error || inputErr || "";
-                                        console.log("PAN", error, "INPUT", inputErr);
                                         return finalErr;
                                     })()}
                                     helperText={(() => {
@@ -354,7 +352,6 @@ const UploadMultiFiles = (props) => {
                                     let error = Boolean(errorObj[file.id]) && Boolean(errorObj[file.id].pan) ? "error" : "";
                                     let inputErr = (file.pan !== "" && !(panRegex.test(file.pan))) ? "error" : "";
                                     let finalErr = error || inputErr || "";
-                                    console.log("PAN", error, "INPUT", inputErr);
                                     return finalErr;
                                 })()}
                                 helperText={(() => {
